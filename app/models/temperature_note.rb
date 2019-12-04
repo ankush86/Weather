@@ -1,0 +1,2 @@
+class TemperatureNote < ApplicationRecord
+end
