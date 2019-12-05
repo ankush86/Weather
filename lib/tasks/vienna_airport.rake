@@ -7,7 +7,7 @@ namespace :vienna_airport do
   task get_departing_flight: :environment do
 
     # Fetch and parse HTML document
-    base_url = 'https://www.viennaairport.com/passagiere/ankunft__abflug/abfluege'
+    base_url = Rails.application.secrets.scraping_website_url
 
     # open site
     browser = Watir::Browser.new
