@@ -1,4 +1,5 @@
 require 'nokogiri'
+require 'watir'
 require 'open-uri'
 
 namespace :vienna_airport do
@@ -7,23 +8,31 @@ namespace :vienna_airport do
 
     # Fetch and parse HTML document
     base_url = 'https://www.viennaairport.com/passagiere/ankunft__abflug/abfluege'
-    response = HTTParty.get(base_url)
-    page = Nokogiri::HTML(response.body)
 
-    # get title of header with CSS
-    record = page.css('.main-page-header.no-icon-md.icon-depart')
-    title = record.text
+    # open site
+    browser = Watir::Browser.new
+    browser.goto base_url
+    sleep 10
 
-    ## need to fetch record of destination and store in model `Destination`
-    ## Use Geocoder to get latitude, longitude (it will use in forecast to get temperature)
-    # result = Geocoder.search(city)
-    # sleep(10)
-    # if result.present?
-    #   lat = result.first.data["lat"]
-    #   lon = result.first.data["lon"]
+    # get site data
+    data = Nokogiri::HTML(browser.html)
+    sleep 10
 
-    #   Destination.create(city_name: city, latitude: lat, longitude: lon)
-    #   puts "create record for #{city}"
-    # end
+    city_names = []
+    # get destination city names
+    data.css('.detail-table__cell.text-uppercase.fdabf-td2 .visible-xs').each { |dest| city_names << dest.text }
+
+    city_names.each do |city|
+      # get coordinate of city
+      result = Geocoder.search(city)
+      sleep(10)
+      if result.present?
+        lat = result.first.data['lat']
+        lon = result.first.data['lon']
+
+        Destination.create(city_name: city, latitude: lat, longitude: lon)
+        puts "create record for #{city}"
+      end
+    end
   end
 end
