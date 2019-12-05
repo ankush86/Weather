@@ -33,6 +33,7 @@ gem 'geocoder'
 
 # Add for scraping
 gem 'nokogiri'
+gem 'watir'
 gem 'httparty'
 gem 'mechanize'
 
