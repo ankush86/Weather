@@ -5,20 +5,27 @@ application up and running.
 
 Things you may want to cover:
 
-* Ruby version
+* Ruby version - 2.6.3
 
-* System dependencies
+* Rails version - 6.0.1
 
-* Configuration
+* DataBase - Postgresql
 
-* Database creation
+* Run `rake "vienna_airport:get_departing_flight"`
+    It will Scrape data to airport website and store city, temperature in Database.
 
-* Database initialization
+* Service :
+    FlightDepartureService : Scraping the Airport website and return page.
+    DestinationService : Create destination city and get coordinate and store in Database.
+    CityTemperatureService : Get `forecast` of destination city and store in Database.
 
-* How to run the test suite
+* Model :
+    Destination : It store destination `city` and its coordinate (get via geocoder).
+                  Coordinate require to get forecast.
 
-* Services (job queues, cache servers, search engines, etc.)
+    TemperatureNote : It store destination `city`, its `temperature` and `note`.
 
-* Deployment instructions
+* Caching :
+    For caching HTML page of Airport website, we use `file_store` at path "/tmp/cache"
 
-* ...
+* Tesing - Using Rails MiniTest
